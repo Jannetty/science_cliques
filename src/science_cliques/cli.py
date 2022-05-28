@@ -1,5 +1,5 @@
 import click
-from sandbox.fibonacci import Fibonacci
+from science_cliques.fibonacci import Fibonacci
 
 
 @click.command()

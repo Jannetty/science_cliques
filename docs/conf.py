@@ -18,12 +18,12 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'SANDBOX'
-copyright = 'YYYY, AUTHOR_NAME'
-author = 'AUTHOR_NAME'
+project = 'science_cliques_sensitivity_analysis'
+copyright = '2022, SOPHIA_JANNETTY'
+author = 'SOPHIA_JANNETTY'
 
 # The full version, including alpha/beta/rc tags
-release = 'VERSION NUMBER X.X.X'
+release = 'VERSION NUMBER 1.0.0'
 
 # -- General configuration ---------------------------------------------------
 

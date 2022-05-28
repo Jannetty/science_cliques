@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import unittest
 from click.testing import CliRunner
-from sandbox.cli import cli
+from science_cliques.cli import cli
 
 
 class TestCLI(unittest.TestCase):

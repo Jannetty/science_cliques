@@ -154,3 +154,25 @@ To avoid this, make sure to list your external dependencies in `conf.py` in the 
 To use Codecov, you must set up the repo on [app.codecov.io](app.codecov.io) and add the code code token (`CODECOV_TOKEN`) as a repository secret.
 Make sure to also up the badge token (not that same as the secret token!) in your README.
 Coverage results from `.github/workflows/build.yml` will be automatically uploaded.
+
+
+### Sophia is adding things now
+
+Here are the potential ranges of parameters
+```python
+    # Possible ranges of parameters
+    possible_number_of_individuals = range(1, 101)
+    possible_number_of_facts = range(1, 1501)
+    possible_investigation_probability = np.arange(0, 1, 0.01)
+    only_new_facts = bool
+    possible_starting_knowledge = range(0, 1501)
+    believe_most_recent = bool
+    possible_reliability_alpha = range(1, 101)
+    possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
+    possible_rewire_probability = np.arange(0, 1, 0.01)
+    direct_calibration = bool
+    possible_proportion_alternative_rewire = np.arange(0, 1, 0.01)
+    possible_alternative_rewire_probability = np.arange(0, 1, 0.01)
+    use_random_seed = bool
+    parameter_randomize = bool
+    '''
