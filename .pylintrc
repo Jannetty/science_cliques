@@ -15,3 +15,7 @@ max-args=10
 
 # Minimum lines number of a similarity.
 min-similarity-lines=7
+
+# Get rid of "import error"
+[MASTER]
+init-hook='import sys; sys.path.append("src")'

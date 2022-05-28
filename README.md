@@ -1,7 +1,11 @@
 # Python project template repository
 
 [![Build Status](https://github.com/bagherilab/python_project_template/workflows/build/badge.svg)](https://github.com/bagherilab/python_project_template/actions?query=workflow%3Abuild)
-[![Codecov](https://img.shields.io/codecov/c/gh/bagherilab/python_project_template?token=HYF4KEB84L)](https://codecov.io/gh/bagherilab/python_project_template)
+[![Codecov](https://img.shields.
+io/codecov/c/gh/jannetty/
+science_cliques_sensitivity_analysis?
+token=0067a3b7-fe1a-4b07-95f2-c4230f7eb3e1)](https://codecov.
+io/gh/jannetty/science_cliques_sensitivity_analysis)
 [![Lint Status](https://github.com/bagherilab/python_project_template/workflows/lint/badge.svg)](https://github.com/bagherilab/python_project_template/actions?query=workflow%3Alint)
 [![Documentation](https://github.com/bagherilab/python_project_template/workflows/documentation/badge.svg)](https://bagherilab.github.io/python_project_template/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
