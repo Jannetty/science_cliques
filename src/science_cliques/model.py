@@ -6,7 +6,7 @@ from individual import Individual
 class CliqueModel(Model):
     """A model with some number of agents."""
 
-    def __init__(self, N):
+    def __init__(self, N: int):
         super().__init__()
         self.num_agents = N
         self.schedule = RandomActivation(self)

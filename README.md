@@ -175,4 +175,57 @@ Here are the potential ranges of parameters
     possible_alternative_rewire_probability = np.arange(0, 1, 0.01)
     use_random_seed = bool
     parameter_randomize = bool
-    '''
+```
+
+### Notes on Zollman's described ABM
+
+#### Setup
+- 100 individuals
+- can solicit 2, 4, 6, or 8 people for testimony (information)
+- "very large number of logically independent propositions" they'd like to learn
+  - 1500 for all runs
+- start life with info about small number of propositions they believe or 
+  disbelieve, abstain from all others
+  - 15 for all runs
+  - correct initial beliefs is correlated to individual's reliability (see 
+    below)
+- for each proposition, individual can believe, disbelieve, or abstain 
+  ("withold judgement")
+- each individual has intrinsic reliability that determines likelihood in 
+  believing true propositions and disbelieving false propositions 
+
+#### Overview of parameters
+- individual reliability (random but averages to 60% over all individuals)
+  - average reliability of all individuals was never varied
+- direct calibration: true and false (from looking at parameters)
+  - true for directhume, false for indirecthume, false for reid
+- neighbor percent = percent of number of neighbors (2 neighbors, 2 percent,
+   8 neighbors, 8 percent)
+- reid wire probability = 0, Hume wire probability = 1
+- investigation probability = .1
+- only_newfacts = false
+- believe_most_recent = false
+- reliability determined by drawing from beta distribution
+  - reliability beta = 1
+  - reliability alpha = 1.5
+- parameter randomize = false
+- step[Y] = 500
+- outputs:
+  - meantruth - mean of individuals[Y]
+  - variancetruth - mean of individuals[Y]
+  - meantruth - total of individuals[Y]
+  - variancetruth - total of individuals[Y]
+  - paper also talks about sizes of communities so probably some statistics 
+    about community size
+  
+#### At each time step each individual
+- observes something true about the world with 10% chance
+- chooses a group of people with which to solicit testimony
+- asks each member of the group to tell them something that member either 
+  believes or disbelieves
+- receives honest replies from the asked individuals
+- if told somethign about which they currently have no opinion, they believe 
+  what they are told. Otherwise they donnot change their belief
+  - "This means that in this model there is no ‘‘belief revision.’’ This is certainly an idealization, which has been made for two reasons. First, following the literature on testimony this model focuses primarily on the acquisition of new beliefs not on belief revision. The later issue, called peer disagreement, has an extensive literature which will not be addressed here. Second, there is no uncontroversial way to model belief revision especially in the context of qualitative beliefs. Important future work should tackle this question directly to determine how robust the findings are to modifications of this assumption."
+Process is repeated 500 times
+

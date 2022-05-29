@@ -1,10 +1,11 @@
 from mesa import Agent
+from model import Model
 
 
 class Individual(Agent):
     """An agent."""
 
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id: int, model: Model):
         super().__init__(unique_id, model)
         self.starting_knowledge = 10
 
