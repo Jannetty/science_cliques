@@ -160,21 +160,22 @@ Coverage results from `.github/workflows/build.yml` will be automatically upload
 
 Here are the potential ranges of parameters
 ```python
-    # Possible ranges of parameters
-    possible_number_of_individuals = range(1, 101)
-    possible_number_of_facts = range(1, 1501)
-    possible_investigation_probability = np.arange(0, 1, 0.01)
-    only_new_facts = bool
-    possible_starting_knowledge = range(0, 1501)
-    believe_most_recent = bool
-    possible_reliability_alpha = range(1, 101)
-    possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
-    possible_rewire_probability = np.arange(0, 1, 0.01)
-    direct_calibration = bool
-    possible_proportion_alternative_rewire = np.arange(0, 1, 0.01)
-    possible_alternative_rewire_probability = np.arange(0, 1, 0.01)
-    use_random_seed = bool
-    parameter_randomize = bool
+import numpy as np
+# Possible ranges of parameters
+possible_number_of_individuals = range(1, 101)
+possible_number_of_facts = range(1, 1501)
+possible_investigation_probability = np.arange(0, 1, 0.01)
+only_new_facts = bool
+possible_starting_knowledge = range(0, 1501)
+believe_most_recent = bool
+possible_reliability_alpha = range(1, 101)
+possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
+possible_rewire_probability = np.arange(0, 1, 0.01)
+direct_calibration = bool
+possible_proportion_alternative_rewire = np.arange(0, 1, 0.01)
+possible_alternative_rewire_probability = np.arange(0, 1, 0.01)
+use_random_seed = bool
+parameter_randomize = bool
 ```
 
 ### Notes on Zollman's described ABM
@@ -229,3 +230,7 @@ Here are the potential ranges of parameters
   - "This means that in this model there is no ‘‘belief revision.’’ This is certainly an idealization, which has been made for two reasons. First, following the literature on testimony this model focuses primarily on the acquisition of new beliefs not on belief revision. The later issue, called peer disagreement, has an extensive literature which will not be addressed here. Second, there is no uncontroversial way to model belief revision especially in the context of qualitative beliefs. Important future work should tackle this question directly to determine how robust the findings are to modifications of this assumption."
 Process is repeated 500 times
 
+### Design
+Class: Individual
+  attributes:
+  - personalFacts
