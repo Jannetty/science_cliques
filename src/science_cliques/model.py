@@ -5,12 +5,6 @@ from mesa.time import RandomActivation
 from science_cliques.individual import Individual
 
 
-def get_agents_personal_rewire(skeptical: bool, reid: bool) -> int:
-    if skeptical == True or reid == True:
-        return 0
-    return 1
-
-
 def calculate_default_reliability() -> float:
     alpha = 1.5
     beta = 1
@@ -164,8 +158,6 @@ class CliqueModel(Model):
         self.agreement_stats = self.make_agreement_stats_matrix(number_of_individuals)
         self.reliability_stats = [None] * self.num_agents
 
-        # determine agents' personal_rewire value
-        agent_personal_rewire = get_agents_personal_rewire(skeptical, reid)
 
         # create agents
         for i in range(self.num_agents):
@@ -174,7 +166,6 @@ class CliqueModel(Model):
             new_individual = Individual(
                 unique_id=i,
                 model=self,
-                personal_rewire=agent_personal_rewire,
                 starting_knowledge=starting_knowledge,
                 reliability=reliability,
                 philosophy=self.philosophy,

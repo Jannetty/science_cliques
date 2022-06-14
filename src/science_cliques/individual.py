@@ -95,10 +95,6 @@ class Individual(Agent):
             default, drawn from beta distribution with alpha = 1.5
             beta = 1 so that average over population is 60%
 
-        personal_rewire : int
-            agent's rewire probability. If model reid or skeptical = 0,
-            otherwise 1.
-
         starting_knowledge : int
             number of facts agents start off having a belief about (number of
             entries in personal_facts)
@@ -208,7 +204,6 @@ class Individual(Agent):
         self,
         unique_id: int,
         model: Model,
-        personal_rewire: int,
         starting_knowledge,
         reliability: float,
         philosophy: str,
@@ -219,7 +214,6 @@ class Individual(Agent):
         super().__init__(unique_id, model)
 
         # set constructor attributes
-        self.personal_rewire = personal_rewire
         self.reliability = reliability
         self.investigation_probability = investigation_probability
         self.philosophy = philosophy
@@ -277,11 +271,14 @@ class Individual(Agent):
             teachers.append(teacher)
         return teachers
 
-    def get_most_reliable_teachers(self) -> None:
+    def get_most_reliable_teachers(self) -> list:
         most_reliable_teacher_ids = get_max_n_indices(
             self.model.reliability_stats, self.num_neighbors)
 
         return most_reliable_teacher_ids
+
+    def get_most_similar_teachers(self) -> list:
+        return []
 
     def step(self) -> None:
         self.investigate()
