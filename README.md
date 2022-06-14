@@ -209,7 +209,7 @@ parameter_randomize = bool
 - reliability determined by drawing from beta distribution
   - reliability beta = 1
   - reliability alpha = 1.5
-- parameter randomize = false
+- parameter randomize = fals
 - step[Y] = 500
 - outputs:
   - meantruth - mean of individuals[Y]
