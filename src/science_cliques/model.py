@@ -103,7 +103,7 @@ class CliqueModel(Model):
         for individual_row in range(number_of_individuals):
             row = []
             for individual_col in range(number_of_individuals):
-                col = []
+                col = [None]
                 row.append(col)
             agreement_stats.append(row)
         return agreement_stats
@@ -155,7 +155,6 @@ class CliqueModel(Model):
         self.schedule = RandomActivation(self)
         self.truth_mean = 0.0
         self.total_truth = 0
-        self.agreement_stats = self.make_agreement_stats_matrix(number_of_individuals)
         self.reliability_stats = [None] * self.num_agents
 
 
@@ -170,10 +169,12 @@ class CliqueModel(Model):
                 reliability=reliability,
                 philosophy=self.philosophy,
             )
-            # add to reliability_stats list
+            # add to reliability_stats list (updates reliability_stats)
             self.reliability_stats[i] = new_individual.truth_mean
-            print(new_individual.truth_mean)
             self.schedule.add(new_individual)
+
+        # initialize and update agreement stats
+        self.update_agreement_stats()
 
     def update_reliability_stats(self) -> None:
         """ Iterates through all individuals in model and sets
@@ -182,8 +183,29 @@ class CliqueModel(Model):
             self.reliability_stats[key_id] = self.schedule._agents[
                 key_id].truth_mean
 
+    def update_agreement_stats(self) -> None:
+        """ Iterates through all individuals and calculates percent
+        agreement, saves values in agreement_stats"""
+        new_agreement_stats = self.make_agreement_stats_matrix(self.num_agents)
+        # for every pair of agents calculate agreement
+        for key_id1 in self.schedule._agents:
+            for key_id2 in self.schedule._agents:
+                # set all selves to be -1
+                if key_id1 == key_id2:
+                    new_agreement_stats[key_id1][key_id2] = -1
+                    new_agreement_stats[key_id2][key_id1] = -1
+                if key_id1 != key_id2 and new_agreement_stats[key_id1][
+                    key_id2] == [None]:
+                    agreement = self.schedule._agents[
+                        key_id1].calculate_agreement(
+                        self.schedule._agents[key_id2])
+                    new_agreement_stats[key_id1][key_id2] = agreement
+                    # make symmetrical
+                    new_agreement_stats[key_id2][key_id1] = agreement
+        self.agreement_stats = new_agreement_stats
 
     def step(self) -> None:
         """Advance the model by one step."""
         self.schedule.step()
         self.update_reliability_stats()
+        self.update_agreement_stats()

@@ -278,11 +278,35 @@ class Individual(Agent):
         return most_reliable_teacher_ids
 
     def get_most_similar_teachers(self) -> list:
-        return []
+        my_agreement_list = [float(x) for x in self.model.agreement_stats[
+            self.unique_id]]
+        most_similar_teacher_ids = get_max_n_indices(my_agreement_list,
+                                                     self.num_neighbors)
+        return most_similar_teacher_ids
 
-    def step(self) -> None:
-        self.investigate()
+    def calculate_agreement(self, individual: Agent) -> float:
+        """ Calculates the % of beliefs self has in common with individual"""
+        my_beliefs = self.all_facts
+        other_beliefs = individual.all_facts
 
+        agreement_sum = 0
+        disagreement_sum = 0
+        for i in range(len(my_beliefs)):
+            if my_beliefs[i] != 0 and other_beliefs[i] != 0:
+                if my_beliefs[i] == other_beliefs[i]:
+                    agreement_sum = agreement_sum + 1
+                else:
+                    disagreement_sum = disagreement_sum + 1
+
+        if agreement_sum + disagreement_sum == 0:
+            agreement_percent = 0
+        else:
+            agreement_percent = agreement_sum / (agreement_sum +
+                                                 disagreement_sum)
+        return agreement_percent
+
+
+    def select_teachers(self) -> list:
         teachers = []
         if self.philosophy == "skeptical":
             # these individuals will not solicit testimony
@@ -297,6 +321,11 @@ class Individual(Agent):
         elif self.philosophy == "indirect":
             # these individuals solicit testimony with others who have most
             # similar beliefs
-            print("Teachers:")
-            print(teachers)
-            pass
+            teachers = self.get_most_similar_teachers()
+        return teachers
+
+    def step(self) -> None:
+        self.investigate()
+
+        teachers = self.select_teachers()
+        print(teachers)
