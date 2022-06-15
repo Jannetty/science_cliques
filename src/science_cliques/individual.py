@@ -134,6 +134,10 @@ class Individual(Agent):
             (number of beliefs that have value == 1) / ((number of beliefs that
             have value == 1) + (number of beliefs that have values == -1))
 
+        false_mean : float
+            (number of beliefs that have value == -1) / ((number of beliefs that
+            have value == 1) + (number of beliefs that have values == -1))
+
         all_facts : list
             contains how agents feel about all facts
 
@@ -178,6 +182,15 @@ class Individual(Agent):
         index = random.randint(0, self.num_facts - 1)
         # make sure this index doesn't currently hold a belief
         while self.all_facts[index] != 0:
+            index = random.randint(0, self.num_facts - 1)
+        return index
+
+    def get_random_index_of_not_abstained_belief(self) -> int:
+        """Selects a random belief about which this individual has a
+        beliefs"""
+        index = random.randint(0, self.num_facts - 1)
+        # make sure this index does currently hold a belief
+        while self.all_facts[index] == 0:
             index = random.randint(0, self.num_facts - 1)
         return index
 
@@ -247,6 +260,8 @@ class Individual(Agent):
         self.truth_total = self.all_facts.count(1)
         self.false_total = self.all_facts.count(-1)
         self.truth_mean = self.truth_total / (self.truth_total + self.false_total)
+        self.false_mean = self.false_total / (self.truth_total +
+                                              self.false_total)
 
         self.unknown_personal_facts = self.personal_facts.count(0)
         self.unknown_social_facts = self.social_facts.count(0)
@@ -256,8 +271,9 @@ class Individual(Agent):
         """Determines if agent observes something true or false about the
         world according to reliability. Adds belief to personal_facts"""
         index = self.get_random_index_of_abstained_belief()
-        self.personal_facts[index] = self.get_belief()
-        self.update_true_false_unknown_counters()
+        new_belief = self.get_belief()
+        self.personal_facts[index] = new_belief
+        self.all_facts[index] = new_belief
 
     def get_random_teachers(self) -> list:
         """Used by reid simulations. Returns list of n_neighbor random
@@ -307,6 +323,8 @@ class Individual(Agent):
 
 
     def select_teachers(self) -> list:
+        """ Selects a set of individuals from whom to solicit testimony based
+        on this agent's philosophy"""
         teachers = []
         if self.philosophy == "skeptical":
             # these individuals will not solicit testimony
@@ -324,8 +342,46 @@ class Individual(Agent):
             teachers = self.get_most_similar_teachers()
         return teachers
 
-    def step(self) -> None:
-        self.investigate()
+    def offer_testimony(self) -> tuple:
+        """ Selects a random belief agent has opinion about and returns fact
+        number and belief"""
+        idx_of_belief_to_share = self.get_random_index_of_not_abstained_belief()
+        return_tuple = (idx_of_belief_to_share, self.all_facts[idx_of_belief_to_share])
+        return return_tuple
 
+    def solicit_testimony(self, teachers: list) -> None:
+        """ Solicits testimony from all teachers. If agent has no belief
+        about a fact, they adopt teacher's testimony. Otherwise ignore
+        teacher's testimony"""
+        for teacher in teachers:
+            this_teacher_agent = self.model.schedule._agents[teacher]
+            fact_and_teacher_fact_belief = this_teacher_agent.offer_testimony()
+            fact_num = fact_and_teacher_fact_belief[0]
+            teacher_fact_belief = fact_and_teacher_fact_belief[1]
+            my_belief_about_this_fact = self.all_facts[fact_num]
+            if my_belief_about_this_fact == 0:
+                self.all_facts[fact_num] = teacher_fact_belief
+                self.social_facts[fact_num] = teacher_fact_belief
+            else:
+                pass
+
+    def should_I_investigate(self) -> bool:
+        """ Determines (based on investigation_probability) whether  or not an
+        agent should investigate this step"""
+        random_investigate_val = random.uniform(0, 1)
+        if random_investigate_val <= self.investigation_probability:
+            return True
+        else:
+            return False
+
+    def step(self) -> None:
+
+        # with investigation_probability chance, investigate
+        if self.should_I_investigate == True:
+            self.investigate()
+        # select teachers
         teachers = self.select_teachers()
-        print(teachers)
+        # solicit testimony
+        self.solicit_testimony(teachers)
+        # update counters (which updates all_facts)
+        self.update_true_false_unknown_counters()

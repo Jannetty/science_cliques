@@ -60,6 +60,12 @@ class CliqueModel(Model):
         total_truth : int
             sum of all agent's true beliefs
 
+        false_mean : float
+            all agents/ false beliefs / (all agents' beliefs)
+
+        total_false : int
+            sum of all agent's false beliefs
+
         agreement_stats : list of lists
             number_of_individuals by number_of_individuals matrix that contains
             degree of agreement between two agents. Symmetric matrix
@@ -154,7 +160,9 @@ class CliqueModel(Model):
         # set other attributes
         self.schedule = RandomActivation(self)
         self.truth_mean = 0.0
+        self.false_mean = 0.0
         self.total_truth = 0
+        self.total_false = 0
         self.reliability_stats = [None] * self.num_agents
 
 
@@ -203,6 +211,36 @@ class CliqueModel(Model):
                     # make symmetrical
                     new_agreement_stats[key_id2][key_id1] = agreement
         self.agreement_stats = new_agreement_stats
+
+    def update_model_truth_false_mean_and_truth_false_total(self):
+        """ Updates model's count of the percent of beliefs in the model that
+        are true and the total number of beliefs in the model that are true
+        (and complimentary false statistics)"""
+        truth_means = []
+        truth_totals = []
+        false_means = []
+        false_totals = []
+        for key_id in self.schedule._agents:
+            this_truth_mean = self.schedule._agents[key_id].truth_mean
+            truth_means.append(this_truth_mean)
+            this_truth_total = self.schedule._agents[key_id].truth_total
+            truth_totals.append(this_truth_total)
+            this_false_mean = self.schedule._agents[key_id].false_mean
+            false_means.append(this_false_mean)
+            this_false_total = self.schedule._agents[key_id].false_total
+            false_totals.append(this_false_total)
+
+        truth_mean = sum(truth_means) / len(truth_means)
+        truth_total = sum(truth_totals)
+        false_mean = sum(false_means) / len(false_means)
+        false_total = sum(false_totals)
+
+        self.truth_mean = truth_mean
+        self.total_truth = truth_total
+        self.false_mean = false_mean
+        self.total_false = false_total
+
+
 
     def step(self) -> None:
         """Advance the model by one step."""
