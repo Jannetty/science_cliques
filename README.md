@@ -6,15 +6,11 @@
 [![Documentation](https://github.com/bagherilab/python_project_template/workflows/documentation/badge.svg)](https://bagherilab.github.io/python_project_template/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Original model implemented by [Kevin J. S. Zollman](https://www.kevinzollman.
-com/) in [Zollman, Kevin J. S. “Modeling the Social Consequences of 
+Original model implemented by [Kevin J. S. Zollman](https://www.kevinzollman.com/) in [Zollman, Kevin J. S. “Modeling the Social Consequences of 
 Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.
-1007/s11098-014-0416-7.](https://www.kevinzollman.
-com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf).
+1007/s11098-014-0416-7.](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf).
 Original source code in netlogo can be found [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo)
-with original data output files [here](https://www.kevinzollman.
-com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.
-kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
+with original data output files [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
 (original data files in [QtiPlotformat](http://www.qtiplot.com/))
 
 Overview of tools implemented in directory:
