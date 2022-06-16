@@ -1,0 +1,20 @@
+science\_cliques package
+========================
+
+.. automodule:: science_cliques
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   science_cliques.cli
+   science_cliques.fibonacci
+   science_cliques.individual
+   science_cliques.model
+   science_cliques.run
+   science_cliques.server

@@ -1,0 +1,7 @@
+science\_cliques.run module
+===========================
+
+.. automodule:: science_cliques.run
+   :members:
+   :undoc-members:
+   :show-inheritance:

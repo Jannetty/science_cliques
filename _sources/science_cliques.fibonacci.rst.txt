@@ -1,0 +1,7 @@
+science\_cliques.fibonacci module
+=================================
+
+.. automodule:: science_cliques.fibonacci
+   :members:
+   :undoc-members:
+   :show-inheritance:

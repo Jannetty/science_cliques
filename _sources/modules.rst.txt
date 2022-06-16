@@ -1,0 +1,7 @@
+science_cliques
+===============
+
+.. toctree::
+   :maxdepth: 4
+
+   science_cliques

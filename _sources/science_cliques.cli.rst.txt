@@ -1,0 +1,7 @@
+science\_cliques.cli module
+===========================
+
+.. automodule:: science_cliques.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
