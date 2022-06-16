@@ -13,7 +13,7 @@ Original source code in netlogo can be found [here](https://www.kevinzollman.com
 with original data output files [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
 (original data files in [QtiPlotformat](http://www.qtiplot.com/))
 
-Overview of tools implemented in directory:
+Overview of tools implemented in directory (thanks to [Jessica Yu](https://github.com/jessicasyu) for guidance on these):
 - [Poetry](https://python-poetry.org/) for packaging and dependency management
 - [Tox](https://tox.readthedocs.io/en/latest/) for automated testing
 - [Black](https://black.readthedocs.io/en/stable/) for code formatting
