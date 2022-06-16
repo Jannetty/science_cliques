@@ -22,7 +22,7 @@ Overview of tools implemented in directory:
 - [Sphinx](https://www.sphinx-doc.org/) for automated documentation
 
 
-### Sophia is adding things now
+### Notes on model
 
 Potential ranges of parameters
 ```python
