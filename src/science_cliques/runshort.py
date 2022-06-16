@@ -3,8 +3,9 @@ import csv
 import numpy as np
 from science_cliques.model import CliqueModel
 
+
 def export_data(model: CliqueModel) -> None:
-    """ Saves all parameteres and outputs of model run"""
+    """Saves all parameteres and outputs of model run"""
     # get parameters
     num_individuals = str(model.num_agents)
     num_neighbors = str(model.num_neighbors)
@@ -29,8 +30,17 @@ def export_data(model: CliqueModel) -> None:
     print(f"Truth total: {truth_total}")
     print(f"False mean: {false_mean}")
     print(f"False total: {false_total}")
-    newrow = [num_individuals,num_neighbors,num_facts,starting_knowledge,
-              philosophy,truth_mean,truth_total,false_mean,false_total]
+    newrow = [
+        num_individuals,
+        num_neighbors,
+        num_facts,
+        starting_knowledge,
+        philosophy,
+        truth_mean,
+        truth_total,
+        false_mean,
+        false_total,
+    ]
 
     # First, open the old CSV file in append mode, hence mentioned as 'a'
     # Then, for the CSV file, create a file object
@@ -44,11 +54,12 @@ def export_data(model: CliqueModel) -> None:
         # Close the file object
         f_object.close()
 
+
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
 
-    for i in range (10):
-        model = CliqueModel(skeptical = True, number_of_individuals=10)
+    for i in range(10):
+        model = CliqueModel(skeptical=True, number_of_individuals=10)
 
         for i in range(500):
             print(i)

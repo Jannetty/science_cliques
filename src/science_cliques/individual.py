@@ -11,6 +11,7 @@ def get_ties(aList: list, element) -> list:
     tie_idxs = [i for i, j in enumerate(aList) if j == element]
     return tie_idxs
 
+
 def check_get_max_n_indices_params(value_list: list, n: int) -> None:
     """Checks to make sure list is list of floats, value_list > 1 element long,
     n > 1, and n <= len(value_list)"""
@@ -24,11 +25,13 @@ def check_get_max_n_indices_params(value_list: list, n: int) -> None:
     if n > len(value_list):
         raise ValueError("n must be less than or equal to len(value_list)")
 
+
 def i_is_first_element(value_list: list, i: int) -> bool:
-    """ Returns true if index i holds the last element of the list"""
+    """Returns true if index i holds the last element of the list"""
     if i == 0:
         return True
     return False
+
 
 def get_max_n_indices(value_list: list, n: int) -> list:
     """Returns the n indices of int list value_list that hold the maximum n
@@ -48,8 +51,7 @@ def get_max_n_indices(value_list: list, n: int) -> list:
         # if this is first element of list or the list doesn't have ties for
         # this
         # element, add it
-        if i_is_first_element(value_list, i) or get_ties(value_list,
-                                                        potential_max) == [i]:
+        if i_is_first_element(value_list, i) or get_ties(value_list, potential_max) == [i]:
             max_indices.append(sorted_indices[i])
             i = i - 1
         # otherwise find where all the ties are
@@ -66,16 +68,14 @@ def get_max_n_indices(value_list: list, n: int) -> list:
                 num_idx_to_choose = n - len(max_indices)
                 # select that number of random indices from list of tied
                 # element indicies
-                random_idxs_of_matching_list_elements = \
-                    random.sample(range(0,
-                                        len(idx_of_matching_list_elements)),
-                                   num_idx_to_choose)
+                random_idxs_of_matching_list_elements = random.sample(
+                    range(0, len(idx_of_matching_list_elements)), num_idx_to_choose
+                )
                 # append to list
                 for idx in random_idxs_of_matching_list_elements:
                     max_indices.append(idx_of_matching_list_elements[idx])
 
     return max_indices
-
 
 
 class Individual(Agent):
@@ -203,7 +203,7 @@ class Individual(Agent):
             self.personal_facts[index] = self.get_belief()
 
     def update_all_facts(self):
-        """ Collects all beliefs about all facts in one list"""
+        """Collects all beliefs about all facts in one list"""
         all_facts = [0] * len(self.all_facts)
         for i in range(len(self.personal_facts)):
             if self.personal_facts[i] != 0:
@@ -211,7 +211,6 @@ class Individual(Agent):
             if self.social_facts[i] != 0:
                 all_facts[i] = self.social_facts[i]
         self.all_facts = all_facts
-
 
     def __init__(
         self,
@@ -238,7 +237,7 @@ class Individual(Agent):
         self.num_facts = self.model.num_facts
         self.truth_total = 0
 
-        #initialize all_facts
+        # initialize all_facts
         self.all_facts = [0] * self.num_facts
         # initialize personal_facts
         self.initialize_personal_facts(self.num_facts, starting_knowledge)
@@ -260,8 +259,7 @@ class Individual(Agent):
         self.truth_total = self.all_facts.count(1)
         self.false_total = self.all_facts.count(-1)
         self.truth_mean = self.truth_total / (self.truth_total + self.false_total)
-        self.false_mean = self.false_total / (self.truth_total +
-                                              self.false_total)
+        self.false_mean = self.false_total / (self.truth_total + self.false_total)
 
         self.unknown_personal_facts = self.personal_facts.count(0)
         self.unknown_social_facts = self.social_facts.count(0)
@@ -279,7 +277,7 @@ class Individual(Agent):
         """Used by reid simulations. Returns list of n_neighbor random
         agents from whom this agent will solicit testimony"""
         teachers = []
-        for i in range (self.num_neighbors):
+        for i in range(self.num_neighbors):
             teacher = random.randint(0, self.model.num_agents)
             # make sure I didn't select myself
             while teacher == self.unique_id:
@@ -289,19 +287,18 @@ class Individual(Agent):
 
     def get_most_reliable_teachers(self) -> list:
         most_reliable_teacher_ids = get_max_n_indices(
-            self.model.reliability_stats, self.num_neighbors)
+            self.model.reliability_stats, self.num_neighbors
+        )
 
         return most_reliable_teacher_ids
 
     def get_most_similar_teachers(self) -> list:
-        my_agreement_list = [float(x) for x in self.model.agreement_stats[
-            self.unique_id]]
-        most_similar_teacher_ids = get_max_n_indices(my_agreement_list,
-                                                     self.num_neighbors)
+        my_agreement_list = [float(x) for x in self.model.agreement_stats[self.unique_id]]
+        most_similar_teacher_ids = get_max_n_indices(my_agreement_list, self.num_neighbors)
         return most_similar_teacher_ids
 
     def calculate_agreement(self, individual: Agent) -> float:
-        """ Calculates the % of beliefs self has in common with individual"""
+        """Calculates the % of beliefs self has in common with individual"""
         my_beliefs = self.all_facts
         other_beliefs = individual.all_facts
 
@@ -317,13 +314,11 @@ class Individual(Agent):
         if agreement_sum + disagreement_sum == 0:
             agreement_percent = 0
         else:
-            agreement_percent = agreement_sum / (agreement_sum +
-                                                 disagreement_sum)
+            agreement_percent = agreement_sum / (agreement_sum + disagreement_sum)
         return agreement_percent
 
-
     def select_teachers(self) -> list:
-        """ Selects a set of individuals from whom to solicit testimony based
+        """Selects a set of individuals from whom to solicit testimony based
         on this agent's philosophy"""
         teachers = []
         if self.philosophy == "skeptical":
@@ -343,14 +338,14 @@ class Individual(Agent):
         return teachers
 
     def offer_testimony(self) -> tuple:
-        """ Selects a random belief agent has opinion about and returns fact
+        """Selects a random belief agent has opinion about and returns fact
         number and belief"""
         idx_of_belief_to_share = self.get_random_index_of_not_abstained_belief()
         return_tuple = (idx_of_belief_to_share, self.all_facts[idx_of_belief_to_share])
         return return_tuple
 
     def solicit_testimony(self, teachers: list) -> None:
-        """ Solicits testimony from all teachers. If agent has no belief
+        """Solicits testimony from all teachers. If agent has no belief
         about a fact, they adopt teacher's testimony. Otherwise ignore
         teacher's testimony"""
         for teacher in teachers:
@@ -366,7 +361,7 @@ class Individual(Agent):
                 pass
 
     def should_I_investigate(self) -> bool:
-        """ Determines (based on investigation_probability) whether  or not an
+        """Determines (based on investigation_probability) whether  or not an
         agent should investigate this step"""
         random_investigate_val = random.uniform(0, 1)
         if random_investigate_val <= self.investigation_probability:

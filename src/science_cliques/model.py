@@ -133,7 +133,7 @@ class CliqueModel(Model):
         number_of_neighbors: int = 6,
         num_facts: int = 1500,
         starting_knowledge: int = 15,
-        investigation_probability: float = .1,
+        investigation_probability: float = 0.1,
         skeptical: bool = False,
         reid: bool = False,
         direct: bool = False,
@@ -170,7 +170,6 @@ class CliqueModel(Model):
         self.total_false = 0
         self.reliability_stats = [None] * self.num_agents
 
-
         # create agents
         for i in range(self.num_agents):
             # calculate reliability
@@ -181,7 +180,7 @@ class CliqueModel(Model):
                 starting_knowledge=starting_knowledge,
                 reliability=reliability,
                 philosophy=self.philosophy,
-                investigation_probability=investigation_probability
+                investigation_probability=investigation_probability,
             )
             # add to reliability_stats list (updates reliability_stats)
             self.reliability_stats[i] = new_individual.truth_mean
@@ -191,14 +190,13 @@ class CliqueModel(Model):
         self.update_agreement_stats()
 
     def update_reliability_stats(self) -> None:
-        """ Iterates through all individuals in model and sets
+        """Iterates through all individuals in model and sets
         reliability_stats[agent_id] to that agent's truth_mean"""
         for key_id in self.schedule._agents:
-            self.reliability_stats[key_id] = self.schedule._agents[
-                key_id].truth_mean
+            self.reliability_stats[key_id] = self.schedule._agents[key_id].truth_mean
 
     def update_agreement_stats(self) -> None:
-        """ Iterates through all individuals and calculates percent
+        """Iterates through all individuals and calculates percent
         agreement, saves values in agreement_stats"""
         new_agreement_stats = self.make_agreement_stats_matrix(self.num_agents)
         # for every pair of agents calculate agreement
@@ -208,18 +206,17 @@ class CliqueModel(Model):
                 if key_id1 == key_id2:
                     new_agreement_stats[key_id1][key_id2] = -1
                     new_agreement_stats[key_id2][key_id1] = -1
-                if key_id1 != key_id2 and new_agreement_stats[key_id1][
-                    key_id2] == [None]:
-                    agreement = self.schedule._agents[
-                        key_id1].calculate_agreement(
-                        self.schedule._agents[key_id2])
+                if key_id1 != key_id2 and new_agreement_stats[key_id1][key_id2] == [None]:
+                    agreement = self.schedule._agents[key_id1].calculate_agreement(
+                        self.schedule._agents[key_id2]
+                    )
                     new_agreement_stats[key_id1][key_id2] = agreement
                     # make symmetrical
                     new_agreement_stats[key_id2][key_id1] = agreement
         self.agreement_stats = new_agreement_stats
 
     def update_model_truth_false_mean_and_truth_false_total(self):
-        """ Updates model's count of the percent of beliefs in the model that
+        """Updates model's count of the percent of beliefs in the model that
         are true and the total number of beliefs in the model that are true
         (and complimentary false statistics)"""
         truth_means = []
@@ -245,8 +242,6 @@ class CliqueModel(Model):
         self.total_truth = truth_total
         self.false_mean = false_mean
         self.total_false = false_total
-
-
 
     def step(self) -> None:
         """Advance the model by one step."""

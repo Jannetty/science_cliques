@@ -3,8 +3,9 @@ import csv
 import numpy as np
 from science_cliques.model import CliqueModel
 
+
 def export_data(model: CliqueModel) -> None:
-    """ Saves all parameteres and outputs of model run"""
+    """Saves all parameteres and outputs of model run"""
     # get parameters
     num_individuals = str(model.num_agents)
     num_neighbors = str(model.num_neighbors)
@@ -29,8 +30,17 @@ def export_data(model: CliqueModel) -> None:
     print(f"Truth total: {truth_total}")
     print(f"False mean: {false_mean}")
     print(f"False total: {false_total}")
-    newrow = [num_individuals,num_neighbors,num_facts,starting_knowledge,
-              philosophy,truth_mean,truth_total,false_mean,false_total]
+    newrow = [
+        num_individuals,
+        num_neighbors,
+        num_facts,
+        starting_knowledge,
+        philosophy,
+        truth_mean,
+        truth_total,
+        false_mean,
+        false_total,
+    ]
 
     # First, open the old CSV file in append mode, hence mentioned as 'a'
     # Then, for the CSV file, create a file object
@@ -44,44 +54,45 @@ def export_data(model: CliqueModel) -> None:
         # Close the file object
         f_object.close()
 
+
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
 
     # Possible ranges of parameters
-    #possible_number_of_neighbors = [2, 4, 6, 8] # len 4
-    possible_number_of_neighbors = [8] # len 1
+    # possible_number_of_neighbors = [2, 4, 6, 8] # len 4
+    possible_number_of_neighbors = [8]  # len 1
 
     possible_number_of_individuals_range = range(20, 101, 20)
     possible_number_of_individuals = [8]
     for i in possible_number_of_individuals_range:
-        possible_number_of_individuals.append(i) # len 6
+        possible_number_of_individuals.append(i)  # len 6
 
     possible_number_of_facts_range = range(300, 1501, 300)
     possible_number_of_facts = [1]
     for i in possible_number_of_facts_range:
-        possible_number_of_facts.append(i) # len 6
+        possible_number_of_facts.append(i)  # len 6
 
-    possible_investigation_probability = np.arange(0, 1, 0.2) # len 5
+    possible_investigation_probability = np.arange(0, 1, 0.2)  # len 5
     # could be interesting to see possible starting knowledge
-    #possible_starting_knowledge = range(0, 1501, 300) # len 6
-    #possible_reliability_alpha = range(1, 101)
-    #possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
+    # possible_starting_knowledge = range(0, 1501, 300) # len 6
+    # possible_reliability_alpha = range(1, 101)
+    # possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
 
     run_number = 1
     total_runs = 7200
 
-
     for num_neighbors in possible_number_of_neighbors:
         for number_of_individuals in possible_number_of_individuals:
             for number_of_facts in possible_number_of_facts:
-                for investigation_probability in \
-                        possible_investigation_probability:
-                    for i in range (10):
-                        model = CliqueModel(number_of_individuals=number_of_individuals,
-                                            number_of_neighbors=num_neighbors,
-                                            num_facts = number_of_facts,
-                                            investigation_probability=investigation_probability,
-                                            skeptical = True)
+                for investigation_probability in possible_investigation_probability:
+                    for i in range(10):
+                        model = CliqueModel(
+                            number_of_individuals=number_of_individuals,
+                            number_of_neighbors=num_neighbors,
+                            num_facts=number_of_facts,
+                            investigation_probability=investigation_probability,
+                            skeptical=True,
+                        )
 
                         for i in range(500):
                             print(i)
@@ -95,6 +106,8 @@ if __name__ == "__main__":
                         false_total = model.total_false
 
                         run_number = run_number + 1
-                        print(f"Run number: {run_number}, {total_runs - run_number} "
-                              f"runs remaining.")
+                        print(
+                            f"Run number: {run_number}, {total_runs - run_number} "
+                            f"runs remaining."
+                        )
                         export_data(model)
