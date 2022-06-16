@@ -1,0 +1,7 @@
+science\_cliques.runshort module
+================================
+
+.. automodule:: science_cliques.runshort
+   :members:
+   :undoc-members:
+   :show-inheritance:

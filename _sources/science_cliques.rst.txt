@@ -12,9 +12,8 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   science_cliques.cli
-   science_cliques.fibonacci
    science_cliques.individual
    science_cliques.model
    science_cliques.run
+   science_cliques.runshort
    science_cliques.server
