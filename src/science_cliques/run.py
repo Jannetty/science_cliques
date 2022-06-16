@@ -45,7 +45,7 @@ def export_data(model: CliqueModel) -> None:
     # First, open the old CSV file in append mode, hence mentioned as 'a'
     # Then, for the CSV file, create a file object
 
-    with open("output.csv", "a", newline="\n") as f_object:
+    with open("data/output.csv", "a", newline="\n") as f_object:
         # Pass the CSV  file object to the writer() function
         writer_object = csv.writer(f_object)
         # Result - a writer object
