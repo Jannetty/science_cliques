@@ -31,6 +31,9 @@ class CliqueModel(Model):
         starting_knowledge : int
             number of facts agents begin having a belief about
 
+        investigation_probability : float
+            probability agents will observe something about the world on a run
+
         skeptical : bool
             if true, agents take skeptical philosophy, only believe facts they
             discover through observation (never believe neighbors. False if reid,
@@ -130,6 +133,7 @@ class CliqueModel(Model):
         number_of_neighbors: int = 6,
         num_facts: int = 1500,
         starting_knowledge: int = 15,
+        investigation_probability: float = .1,
         skeptical: bool = False,
         reid: bool = False,
         direct: bool = False,
@@ -156,6 +160,7 @@ class CliqueModel(Model):
         self.num_neighbors = number_of_neighbors
         self.num_facts = num_facts
         self.set_philosophy(skeptical, reid, direct, indirect)
+        self.starting_knowledge = starting_knowledge
 
         # set other attributes
         self.schedule = RandomActivation(self)
@@ -176,6 +181,7 @@ class CliqueModel(Model):
                 starting_knowledge=starting_knowledge,
                 reliability=reliability,
                 philosophy=self.philosophy,
+                investigation_probability=investigation_probability
             )
             # add to reliability_stats list (updates reliability_stats)
             self.reliability_stats[i] = new_individual.truth_mean
