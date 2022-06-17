@@ -77,16 +77,29 @@
 <a class="reference external image-reference" href="https://jannetty.github.io/science_cliques/"><img alt="Documentation" src="https://github.com/Jannetty/science_cliques/workflows/documentation/badge.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/psf/black"><img alt="Code style" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
 <p>This repo contains a python implementation of <a class="reference external" href="https://www.kevinzollman.com/">Kevin J. S. Zollman’s</a>
-“Science Cliques” agent based model. The model was reimplemented to enable
-sensitivity analysis via rapid iteration through parameter values.</p>
-<p>The original model was published in
+“Science Cliques” agent based model.
+The original model was published in
 <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf">Zollman, Kevin J.
 S. “Modeling the Social Consequences of
 Testimonial Norms.”</a>
-(Zollman, Kevin J. S. “Modeling the Social Consequences of Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.1007/s11098-014-0416-7.)</p>
-<p>Original source code in netlogo can be found <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo">here</a>
+(Zollman, Kevin J. S. “Modeling the Social Consequences of Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.1007/s11098-014-0416-7.)
+Original source code in netlogo can be found <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo">here</a>
 with original data output files <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti">here</a> and <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti">here</a>
 (original data files in <a class="reference external" href="http://www.qtiplot.com/">QtiPlotformat</a>)</p>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h2>
+<p>Philosophers of science use Agent Based Models (ABMs) to study how
+collaboration and communication network structures emerge from decisions and
+actions made by individual scientists. While models in this field have allowed
+researchers to generate new hypotheses relating individuals’ behaviors to
+emergent network structures, researchers rarely discuss the robustness of
+their results to changes in (parametric and non parametric) model elements,
+nor do researchers frequently characterize which elements have the greatest
+impact on emergent behavior.</p>
+<p>Here I present an example of how a simple sensitivity analysis can be
+conducted on a philosophy ABM and what additional information can be gleaned
+from sensitivity analysis.</p>
+</section>
 <section id="model-overview">
 <h2>Model overview<a class="headerlink" href="#model-overview" title="Permalink to this heading"></a></h2>
 <p>number_of_individuals individuals exist in the model. Each individual
@@ -122,8 +135,8 @@ their teachers, calculated using the equation below.</p>
 <p>![Small x=frac{mathrm{truebeliefs}}{(textrm{truebeliefs}&amp;space;&amp;plus;
 &amp;space;textrm{falsebeliefs})}](<a class="reference external" href="https://latex.codecogs.com/svg.image">https://latex.codecogs.com/svg.image</a>?frac{mathrm{truebeliefs}}{(textrm{truebeliefs}&amp;space;&amp;plus;&amp;space;textrm{falsebeliefs})})</p>
 <p>Indirect individuals select individuals who have the most beliefs
-in common with themselves as their teachers. All ties when direct or indirect individuals are selecting teachers are
-broken randomly.</p>
+in common with themselves as their teachers. All ties when direct or indirect
+individuals are selecting teachers are broken randomly.</p>
 </section>
 <section id="sensitivity-analysis">
 <h2>Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this heading"></a></h2>
