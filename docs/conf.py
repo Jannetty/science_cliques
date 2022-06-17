@@ -18,7 +18,7 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'science_cliques_sensitivity_analysis'
+project = 'science_cliques'
 copyright = '2022, SOPHIA_JANNETTY'
 author = 'SOPHIA_JANNETTY'
 

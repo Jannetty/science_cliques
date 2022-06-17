@@ -1,11 +1,11 @@
-import numpy as np
 import random
+import numpy as np
 
 from mesa import Agent
 from mesa import Model
 
 
-def get_ties(aList: list, element) -> list:
+def get_ties(aList: list, element: float) -> list:
     """Takes a list and a list element, returns all indices that contain that
     element"""
     tie_idxs = [i for i, j in enumerate(aList) if j == element]
@@ -26,8 +26,8 @@ def check_get_max_n_indices_params(value_list: list, n: int) -> None:
         raise ValueError("n must be less than or equal to len(value_list)")
 
 
-def i_is_first_element(value_list: list, i: int) -> bool:
-    """Returns true if index i holds the last element of the list"""
+def i_is_first_element(i: int) -> bool:
+    """Returns true if index i holds the first element of the list"""
     if i == 0:
         return True
     return False
@@ -43,7 +43,7 @@ def get_max_n_indices(value_list: list, n: int) -> list:
     # sort indices in descending order
     sorted_indices = np.argsort(value_list)
 
-    max_indices = []
+    max_indices: list[int] = []
     i = len(sorted_indices) - 1
     # start at max element
     while len(max_indices) < n:
@@ -51,7 +51,7 @@ def get_max_n_indices(value_list: list, n: int) -> list:
         # if this is first element of list or the list doesn't have ties for
         # this
         # element, add it
-        if i_is_first_element(value_list, i) or get_ties(value_list, potential_max) == [i]:
+        if i_is_first_element(i) or get_ties(value_list, potential_max) == [i]:
             max_indices.append(sorted_indices[i])
             i = i - 1
         # otherwise find where all the ties are
@@ -173,8 +173,7 @@ class Individual(Agent):
         random_fact_val = random.uniform(0, 1)
         if random_fact_val <= self.reliability:
             return 1
-        elif random_fact_val > self.reliability:
-            return -1
+        return -1
 
     def get_random_index_of_abstained_belief(self) -> int:
         """Selects a random belief about which this individual has no
@@ -202,21 +201,21 @@ class Individual(Agent):
             index = self.get_random_index_of_abstained_belief()
             self.personal_facts[index] = self.get_belief()
 
-    def update_all_facts(self):
+    def update_all_facts(self) -> None:
         """Collects all beliefs about all facts in one list"""
-        all_facts = [0] * len(self.all_facts)
+        all_facts: list = [0] * len(self.personal_facts)
         for i in range(len(self.personal_facts)):
             if self.personal_facts[i] != 0:
                 all_facts[i] = self.personal_facts[i]
             if self.social_facts[i] != 0:
                 all_facts[i] = self.social_facts[i]
-        self.all_facts = all_facts
+        self.all_facts: list = all_facts
 
     def __init__(
         self,
         unique_id: int,
         model: Model,
-        starting_knowledge,
+        starting_knowledge: int,
         reliability: float,
         philosophy: str,
         investigation_probability: float = 0.1,
@@ -238,12 +237,12 @@ class Individual(Agent):
         self.truth_total = 0
 
         # initialize all_facts
-        self.all_facts = [0] * self.num_facts
+        # self.all_facts: list = [0] * self.num_facts
         # initialize personal_facts
         self.initialize_personal_facts(self.num_facts, starting_knowledge)
         # initialize social_facts
-        self.social_facts = [0] * self.num_facts
-        # update all_facts
+        self.social_facts: list = [0] * self.num_facts
+        # initialize/update all_facts
         self.update_all_facts()
 
         # initialize truth_total, false_total, truth_mean
@@ -278,14 +277,16 @@ class Individual(Agent):
         agents from whom this agent will solicit testimony"""
         teachers = []
         for i in range(self.num_neighbors):
-            teacher = random.randint(0, self.model.num_agents)
+            teacher = random.randint(0, self.model.num_agents - 1)
             # make sure I didn't select myself
             while teacher == self.unique_id:
-                teacher = random.randint(0, self.model.num_agents)
+                teacher = random.randint(0, self.model.num_agents - 1)
             teachers.append(teacher)
         return teachers
 
     def get_most_reliable_teachers(self) -> list:
+        """Finds individuals in model with highest truth_mean. Breaks ties
+        randomly"""
         most_reliable_teacher_ids = get_max_n_indices(
             self.model.reliability_stats, self.num_neighbors
         )
@@ -293,6 +294,8 @@ class Individual(Agent):
         return most_reliable_teacher_ids
 
     def get_most_similar_teachers(self) -> list:
+        """Finds individuals in model with most similar beliefs to self.
+        Breaks ties randomly"""
         my_agreement_list = [float(x) for x in self.model.agreement_stats[self.unique_id]]
         most_similar_teacher_ids = get_max_n_indices(my_agreement_list, self.num_neighbors)
         return most_similar_teacher_ids
@@ -312,7 +315,7 @@ class Individual(Agent):
                     disagreement_sum = disagreement_sum + 1
 
         if agreement_sum + disagreement_sum == 0:
-            agreement_percent = 0
+            agreement_percent = 0.0
         else:
             agreement_percent = agreement_sum / (agreement_sum + disagreement_sum)
         return agreement_percent
@@ -360,19 +363,18 @@ class Individual(Agent):
             else:
                 pass
 
-    def should_I_investigate(self) -> bool:
+    def should_i_investigate(self) -> bool:
         """Determines (based on investigation_probability) whether  or not an
         agent should investigate this step"""
         random_investigate_val = random.uniform(0, 1)
         if random_investigate_val <= self.investigation_probability:
             return True
-        else:
-            return False
+        return False
 
     def step(self) -> None:
 
         # with investigation_probability chance, investigate
-        if self.should_I_investigate == True:
+        if self.should_i_investigate is True:
             self.investigate()
         # select teachers
         teachers = self.select_teachers()

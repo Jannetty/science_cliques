@@ -6,10 +6,54 @@ from science_cliques.individual import Individual
 
 
 def calculate_default_reliability() -> float:
+    """Draws reliability for individual from beta distribution with alpa=1.5
+    beta=1 so average over population is .6"""
     alpha = 1.5
     beta = 1
     reliability = np.random.beta(a=alpha, b=beta)
     return reliability
+
+
+def check_model_init_params(
+    number_of_individuals: int,
+    number_of_neighbors: int,
+    num_facts: int,
+    starting_knowledge: int,
+    skeptical: bool,
+    reid: bool,
+    direct: bool,
+    indirect: bool,
+) -> None:
+    """Checks to make sure parameters are acceptable values"""
+    if (skeptical + reid + direct + indirect) == 0:
+        raise ValueError(
+            "Please set one (and only one) of the following "
+            "to True: skeptical, reid, direct, or indirect"
+        )
+    if (skeptical + reid + direct + indirect) > 1:
+        raise ValueError(
+            "Only one of [skeptical, reid, direct, indirect] "
+            "can be set to True. Please set one to True and "
+            "all others to False."
+        )
+    if starting_knowledge >= num_facts:
+        raise ValueError("starting_knowledge must be lower than num_facts")
+    if num_facts <= 0:
+        raise ValueError("num_facts must be greater than 0")
+
+    if number_of_individuals > number_of_neighbors:
+        raise ValueError("number_of_neighbors cannot be higher than " "number_of_individuals.")
+
+
+def make_agreement_stats_matrix(number_of_individuals: int) -> list:
+    agreement_stats = []
+    for individual_row in range(number_of_individuals):
+        row = []
+        for individual_col in range(number_of_individuals):
+            col = [None]
+            row.append(col)
+        agreement_stats.append(row)
+    return agreement_stats
 
 
 class CliqueModel(Model):
@@ -80,44 +124,9 @@ class CliqueModel(Model):
 
     """
 
-    def check_params(
-        self,
-        number_of_individuals: int,
-        number_of_neighbors: int,
-        num_facts: int,
-        starting_knowledge: int,
-        skeptical: bool,
-        reid: bool,
-        direct: bool,
-        indirect: bool,
-    ) -> None:
-        if (skeptical + reid + direct + indirect) == 0:
-            raise ValueError(
-                "Please set one (and only one) of the following "
-                "to True: skeptical, reid, direct, or indirect"
-            )
-        if (skeptical + reid + direct + indirect) > 1:
-            raise ValueError(
-                "Only one of [skeptical, reid, direct, indirect] "
-                "can be set to True. Please set one to True and "
-                "all others to False."
-            )
-        if starting_knowledge >= num_facts:
-            raise ValueError("starting_knowledge must be lower than num_facts")
-        if num_facts <= 0:
-            raise ValueError("num_facts must be greater than 0")
-
-    def make_agreement_stats_matrix(self, number_of_individuals: int) -> list:
-        agreement_stats = []
-        for individual_row in range(number_of_individuals):
-            row = []
-            for individual_col in range(number_of_individuals):
-                col = [None]
-                row.append(col)
-            agreement_stats.append(row)
-        return agreement_stats
-
     def set_philosophy(self, skeptical: bool, reid: bool, direct: bool, indirect: bool) -> None:
+        """Determines philosophies of agents based on construction
+        parameters"""
         if skeptical:
             self.philosophy = "skeptical"
         elif reid:
@@ -141,7 +150,7 @@ class CliqueModel(Model):
     ) -> None:
 
         # make sure parameters passed are valid
-        self.check_params(
+        check_model_init_params(
             number_of_individuals,
             number_of_neighbors,
             num_facts,
@@ -161,6 +170,7 @@ class CliqueModel(Model):
         self.num_facts = num_facts
         self.set_philosophy(skeptical, reid, direct, indirect)
         self.starting_knowledge = starting_knowledge
+        self.investigation_probability = investigation_probability
 
         # set other attributes
         self.schedule = RandomActivation(self)
@@ -168,7 +178,7 @@ class CliqueModel(Model):
         self.false_mean = 0.0
         self.total_truth = 0
         self.total_false = 0
-        self.reliability_stats = [None] * self.num_agents
+        self.reliability_stats: list = [None] * self.num_agents
 
         # create agents
         for i in range(self.num_agents):
@@ -198,7 +208,7 @@ class CliqueModel(Model):
     def update_agreement_stats(self) -> None:
         """Iterates through all individuals and calculates percent
         agreement, saves values in agreement_stats"""
-        new_agreement_stats = self.make_agreement_stats_matrix(self.num_agents)
+        new_agreement_stats = make_agreement_stats_matrix(self.num_agents)
         # for every pair of agents calculate agreement
         for key_id1 in self.schedule._agents:
             for key_id2 in self.schedule._agents:
@@ -215,7 +225,7 @@ class CliqueModel(Model):
                     new_agreement_stats[key_id2][key_id1] = agreement
         self.agreement_stats = new_agreement_stats
 
-    def update_model_truth_false_mean_and_truth_false_total(self):
+    def update_model_truth_false_mean_and_truth_false_total(self) -> None:
         """Updates model's count of the percent of beliefs in the model that
         are true and the total number of beliefs in the model that are true
         (and complimentary false statistics)"""

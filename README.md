@@ -1,9 +1,9 @@
 # Sensitivity analysis on a model the social consequences of testimonial norms
 
-[![Build Status](https://github.com/Jannetty/science_cliques_sensitivity_analysis/workflows/build/badge.svg)](https://github.com/Jannetty/science_cliques_sensitivity_analysis/actions?query=workflow%3Abuild)
-[![codecov](https://codecov.io/gh/Jannetty/science_cliques_sensitivity_analysis/branch/main/graph/badge.svg?token=ZK8G71CJUU)](https://codecov.io/gh/Jannetty/science_cliques_sensitivity_analysis)
-[![Lint Status](https://github.com/Jannetty/science_cliques_sensitivity_analysis/workflows/lint/badge.svg)](https://github.com/Jannetty/science_cliques_sensitivity_analysis/actions?query=workflow%3Alint)
-[![Documentation](https://github.com/bagherilab/python_project_template/workflows/documentation/badge.svg)](https://bagherilab.github.io/python_project_template/)
+[![Build Status](https://github.com/Jannetty/science_cliques/workflows/build/badge.svg)](https://github.com/Jannetty/science_cliques/actions?query=workflow%3Abuild)
+[![codecov](https://codecov.io/gh/Jannetty/science_cliques/branch/main/graph/badge.svg?token=p46b5eTAyy)](https://codecov.io/gh/Jannetty/science_cliques)
+[![Lint Status](https://github.com/Jannetty/science_cliques/workflows/lint/badge.svg)](https://github.com/Jannetty/science_cliques/actions?query=workflow%3Alint)
+[![Documentation](https://github.com/Jannetty/science_cliques/workflows/documentation/badge.svg)](https://jannetty.github.io/science_cliques/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Original model implemented by [Kevin J. S. Zollman](https://www.kevinzollman.com/) in [Zollman, Kevin J. S. “Modeling the Social Consequences of 

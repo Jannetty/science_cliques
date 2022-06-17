@@ -42,7 +42,7 @@ jobs:
     - name: Lint with pylint
       run: |
         source .venv/bin/activate
-        pylint --ignore-patterns=test.*?py src/ tests/ --fail-under=7.0
+        pylint --ignore-patterns=test.*?py src/ tests/ --fail-under=8.0
 
     - name: Check with black
       run: |
