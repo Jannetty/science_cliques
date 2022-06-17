@@ -41,7 +41,7 @@ def check_model_init_params(
     if num_facts <= 0:
         raise ValueError("num_facts must be greater than 0")
 
-    if number_of_individuals > number_of_neighbors:
+    if number_of_individuals < number_of_neighbors:
         raise ValueError("number_of_neighbors cannot be higher than " "number_of_individuals.")
 
 

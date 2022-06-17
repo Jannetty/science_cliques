@@ -167,6 +167,44 @@ class Individual(Agent):
 
     """
 
+    def __init__(
+        self,
+        unique_id: int,
+        model: Model,
+        starting_knowledge: int,
+        reliability: float,
+        philosophy: str,
+        investigation_probability: float = 0.1,
+    ) -> None:
+        """Initializes a new Individual agent"""
+
+        super().__init__(unique_id, model)
+
+        # set constructor attributes
+        self.reliability = reliability
+        self.investigation_probability = investigation_probability
+        self.philosophy = philosophy
+
+        # initialize num_neighbors
+        self.num_neighbors = self.model.num_neighbors
+
+        # initialize truth_total
+        self.num_facts = self.model.num_facts
+        self.truth_total = 0
+
+        # initialize all_facts
+        self.all_facts: list = [0] * self.num_facts
+        # initialize personal_facts
+        self.initialize_personal_facts(self.num_facts, starting_knowledge)
+        # initialize social_facts
+        self.social_facts: list = [0] * self.num_facts
+        # initialize/update all_facts
+        self.update_all_facts()
+
+        # initialize truth_total, false_total, truth_mean
+        # unknown_personal_facts, unknown_social_facts, and unknown_total_facts
+        self.update_true_false_unknown_counters()
+
     def get_belief(self) -> int:
         """Determines whether an agent has a correct (1) or incorrect (-1)
         belief about a fact according to that agent's reliability"""
@@ -209,45 +247,7 @@ class Individual(Agent):
                 all_facts[i] = self.personal_facts[i]
             if self.social_facts[i] != 0:
                 all_facts[i] = self.social_facts[i]
-        self.all_facts: list = all_facts
-
-    def __init__(
-        self,
-        unique_id: int,
-        model: Model,
-        starting_knowledge: int,
-        reliability: float,
-        philosophy: str,
-        investigation_probability: float = 0.1,
-    ) -> None:
-        """Initializes a new Individual agent"""
-
-        super().__init__(unique_id, model)
-
-        # set constructor attributes
-        self.reliability = reliability
-        self.investigation_probability = investigation_probability
-        self.philosophy = philosophy
-
-        # initialize num_neighbors
-        self.num_neighbors = self.model.num_neighbors
-
-        # initialize truth_total
-        self.num_facts = self.model.num_facts
-        self.truth_total = 0
-
-        # initialize all_facts
-        # self.all_facts: list = [0] * self.num_facts
-        # initialize personal_facts
-        self.initialize_personal_facts(self.num_facts, starting_knowledge)
-        # initialize social_facts
-        self.social_facts: list = [0] * self.num_facts
-        # initialize/update all_facts
-        self.update_all_facts()
-
-        # initialize truth_total, false_total, truth_mean
-        # unknown_personal_facts, unknown_social_facts, and unknown_total_facts
-        self.update_true_false_unknown_counters()
+        self.all_facts = all_facts
 
     def update_true_false_unknown_counters(self) -> None:
         """Counts true, false, and unknown beliefs in personal_facts and

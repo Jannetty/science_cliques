@@ -1,5 +1,11 @@
 import unittest
-from science_cliques.individual import get_ties, check_get_max_n_indices_params, get_max_n_indices
+from science_cliques.individual import (
+    get_ties,
+    check_get_max_n_indices_params,
+    get_max_n_indices,
+    i_is_first_element,
+)
+from science_cliques.model import CliqueModel
 
 
 class TestIndividual(unittest.TestCase):
@@ -45,3 +51,15 @@ class TestIndividual(unittest.TestCase):
         n = 2
         list = [9.0, 3.0, 7.0, 9.0, 9.0, 6.0, 9.0, 10.0]
         assert len(get_max_n_indices(list, n)) == n
+
+    def test_i_is_first_element(self):
+        assert i_is_first_element(0)
+
+    def test_get_random_index_beliefs(self):
+        model = CliqueModel(skeptical=True)
+        agent0_abstained_belief = model.schedule._agents[0].get_random_index_of_abstained_belief()
+        assert model.schedule._agents[0].all_facts[agent0_abstained_belief] == 0
+        agent0_not_abstained_belief = model.schedule._agents[
+            0
+        ].get_random_index_of_not_abstained_belief()
+        assert model.schedule._agents[0].all_facts[agent0_not_abstained_belief] != 0
