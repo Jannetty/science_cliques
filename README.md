@@ -6,14 +6,88 @@
 [![Documentation](https://github.com/Jannetty/science_cliques/workflows/documentation/badge.svg)](https://jannetty.github.io/science_cliques/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Original model implemented by [Kevin J. S. Zollman](https://www.kevinzollman.com/) in [Zollman, Kevin J. S. “Modeling the Social Consequences of 
-Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.
-1007/s11098-014-0416-7.](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf).
+This repo contains a python implementation of [Kevin J. S. Zollman's](https://www.kevinzollman.com/)
+"Science Cliques" agent based model. The model was reimplemented to enable 
+sensitivity analysis via rapid iteration through parameter values.
+
+The original model was published in 
+[Zollman, Kevin J.
+S. “Modeling the Social Consequences of 
+Testimonial Norms.”](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf)
+(Zollman, Kevin J. S. “Modeling the Social Consequences of Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.1007/s11098-014-0416-7.)
+
 Original source code in netlogo can be found [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo)
 with original data output files [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
 (original data files in [QtiPlotformat](http://www.qtiplot.com/))
 
-Overview of tools implemented in directory (thanks to [Jessica Yu](https://github.com/jessicasyu) for guidance on these):
+## Model overview
+number_of_individuals individuals exist in the model. Each individual 
+has a reliability(which is pulled from a beta distrubution and averages .6 
+over the entire population). num_facts number of facts exist in the
+model. Individuals have a correct belief, an incorrect belief, or no 
+belief about each fact. Individuals begin with a starting_knowledge number 
+of beliefs. The accuracy of these initial beliefs is proportional to the 
+individual's reliability (an individual with a reliability of .6 will have 
+roughly 60% true beliefs and 40% false beliefs).
+
+The model is advanced 500 time steps per run. At each time step, each 
+individual progresses through three phases.
+1. **Investigate**: With probability investigation_probability, independently 
+   generate a new belief about a fact the individual previously had no 
+   opinion about. The probability of this new belief being true is the 
+   individual's reliability.
+2. **Select Teachers**: Select a set of number_of_neighbors unique individuals 
+   from whom to solicit testimony. Each teacher presents a random fact and 
+   opinion about that fact. Teachers only present facts about which they 
+   have an opinion.
+3. **Learn**: Adopt the opinions of teachers if they offer an opinion about 
+   a fact this individual does not currently have an opinion about, 
+   otherwise ignore new teacher and keep previous opinion.
+
+All individuals in a model follow one of four philosophies; skeptical, reid, 
+direct, and indirect. The individuals' philosophy determines each 
+individual's behavior in each phase. Skeptical individuals do not 
+select teachers nor learn from teachers. They only learn new facts through 
+investigation. Reid individuals select teachers randomly. Direct individuals 
+select the individuals who have the highest percentage of true beliefs as 
+their teachers, calculated using the equation below.
+
+![\Small x=\frac{\mathrm{truebeliefs}}{(\textrm{truebeliefs}&space;&plus;
+&space;\textrm{falsebeliefs})}](https://latex.codecogs.com/svg.image?\frac{\mathrm{truebeliefs}}{(\textrm{truebeliefs}&space;&plus;&space;\textrm{falsebeliefs})}) 
+
+Indirect individuals select individuals who have the most beliefs 
+in common with themselves as their teachers. All ties when direct or indirect individuals are selecting teachers are 
+broken randomly.
+
+## Sensitivity Analysis
+The sensitivity analysis implemented here is a simple one-at-a-time method. The model was run 10 times with each permutation of parameters.
+The parameters selected for sensitivity analysis are as follows:
+- number_of_individuals: the total number of individuals in the model. 
+  - Values tested: [8, 20, 40, 60, 80, 100]
+- number_of_facts: the total number of facts in the model.
+  - Values tested: [16, 300, 600, 900, 1200, 1500]
+- investigation_probability: the probability an individual investigates and 
+  generates a new belief about an unknown fact each run
+  - Values tested: [0, .2, .4, .6, .8, 1]
+- philosophy: the philosophy guiding individual behavior 
+  - Values tested: 
+    ['skeptical', 'reid', 'direct', 'indirect']
+
+number_of_neighbors was set to 8 for all runs.
+
+The output measured for each run were as follows:
+- truth_mean: the percent of facts agents' have opinions about that are true 
+  (calculated using equation above for all agents' beliefs in the model)
+- truth_total: the total number of true opinions held by all agents in the model
+- false_mean: the percent of facts agents' have opinions about that are false
+- false_total: the total number of false opinions held by all agents in the 
+  model
+
+Correlation coefficients were calculated between parameters and outputs.
+
+## Implementation Details
+Brief overview of python tools implemented in directory (thanks to [Jessica 
+Yu's](https://github.com/jessicasyu) python template):
 - [Poetry](https://python-poetry.org/) for packaging and dependency management
 - [Tox](https://tox.readthedocs.io/en/latest/) for automated testing
 - [Black](https://black.readthedocs.io/en/stable/) for code formatting
@@ -22,76 +96,3 @@ Overview of tools implemented in directory (thanks to [Jessica Yu](https://githu
 - [Sphinx](https://www.sphinx-doc.org/) for automated documentation
 
 
-### Notes on model
-
-Potential ranges of parameters
-```python
-import numpy as np
-# Possible ranges of parameters
-possible_number_of_individuals = range(1, 101)
-possible_number_of_facts = range(1, 1501)
-possible_investigation_probability = np.arange(0, 1, 0.01)
-only_new_facts = bool
-possible_starting_knowledge = range(0, 1501)
-believe_most_recent = bool
-possible_reliability_alpha = range(1, 101)
-possible_reliability_beta = np.arange(0.001, 0.991, 0.01)
-possible_rewire_probability = np.arange(0, 1, 0.01)
-direct_calibration = bool
-possible_proportion_alternative_rewire = np.arange(0, 1, 0.01)
-possible_alternative_rewire_probability = np.arange(0, 1, 0.01)
-use_random_seed = bool
-parameter_randomize = bool
-```
-
-### Notes on Zollman's described ABM
-
-#### Setup
-- 100 individuals
-- can solicit 2, 4, 6, or 8 people for testimony (information)
-- "very large number of logically independent propositions" they'd like to learn
-  - 1500 for all runs
-- start life with info about small number of propositions they believe or 
-  disbelieve, abstain from all others
-  - 15 for all runs
-  - correct initial beliefs is correlated to individual's reliability (see 
-    below)
-- for each proposition, individual can believe, disbelieve, or abstain 
-  ("withold judgement")
-- each individual has intrinsic reliability that determines likelihood in 
-  believing true propositions and disbelieving false propositions 
-
-#### Overview of parameters
-- individual reliability (random but averages to 60% over all individuals)
-  - average reliability of all individuals was never varied
-- direct calibration: true and false (from looking at parameters)
-  - true for directhume, false for indirecthume, false for reid
-- neighbor percent = percent of number of neighbors (2 neighbors, 2 percent,
-   8 neighbors, 8 percent)
-- reid wire probability = 0, Hume wire probability = 1
-- investigation probability = .1
-- only_newfacts = false
-- believe_most_recent = false
-- reliability determined by drawing from beta distribution
-  - reliability beta = 1
-  - reliability alpha = 1.5
-- parameter randomize = fals
-- step[Y] = 500
-- outputs:
-  - meantruth - mean of individuals[Y]
-  - variancetruth - mean of individuals[Y]
-  - meantruth - total of individuals[Y]
-  - variancetruth - total of individuals[Y]
-  - paper also talks about sizes of communities so probably some statistics 
-    about community size
-  
-#### At each time step each individual
-- observes something true about the world with 10% chance
-- chooses a group of people with which to solicit testimony
-- asks each member of the group to tell them something that member either 
-  believes or disbelieves
-- receives honest replies from the asked individuals
-- if told somethign about which they currently have no opinion, they believe 
-  what they are told. Otherwise they donnot change their belief
-  - "This means that in this model there is no ‘‘belief revision.’’ This is certainly an idealization, which has been made for two reasons. First, following the literature on testimony this model focuses primarily on the acquisition of new beliefs not on belief revision. The later issue, called peer disagreement, has an extensive literature which will not be addressed here. Second, there is no uncontroversial way to model belief revision especially in the context of qualitative beliefs. Important future work should tackle this question directly to determine how robust the findings are to modifications of this assumption."
-Process is repeated 500 times
