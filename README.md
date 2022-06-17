@@ -71,7 +71,7 @@ in common with themselves as their teachers. All ties when direct or indirect
 individuals are selecting teachers are broken randomly.
 
 ## Sensitivity Analysis
-The sensitivity analysis implemented here is a simple one-at-a-time method. The model was run 10 times with each permutation of parameters.
+The sensitivity analysis implemented here is a simple one-at-a-time method.
 The parameters selected for sensitivity analysis are as follows:
 - number_of_individuals: the total number of individuals in the model. 
   - Values tested: [8, 20, 40, 60, 80, 100]
@@ -84,6 +84,7 @@ The parameters selected for sensitivity analysis are as follows:
   - Values tested: 
     ['skeptical', 'reid', 'direct', 'indirect']
 
+The model was run 10 times with each permutation of parameters. 
 number_of_neighbors was set to 8 for all runs.
 
 The output measured for each run were as follows:
