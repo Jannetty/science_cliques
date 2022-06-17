@@ -12,6 +12,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   science_cliques.data_analysis
    science_cliques.individual
    science_cliques.model
    science_cliques.run

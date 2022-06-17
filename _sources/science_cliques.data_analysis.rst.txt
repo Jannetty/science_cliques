@@ -1,0 +1,7 @@
+science\_cliques.data\_analysis module
+======================================
+
+.. automodule:: science_cliques.data_analysis
+   :members:
+   :undoc-members:
+   :show-inheritance:
