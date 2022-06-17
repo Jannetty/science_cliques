@@ -76,13 +76,99 @@
 <a class="reference external image-reference" href="https://github.com/Jannetty/science_cliques/actions?query=workflow%3Alint"><img alt="Lint Status" src="https://github.com/Jannetty/science_cliques/workflows/lint/badge.svg" /></a>
 <a class="reference external image-reference" href="https://jannetty.github.io/science_cliques/"><img alt="Documentation" src="https://github.com/Jannetty/science_cliques/workflows/documentation/badge.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/psf/black"><img alt="Code style" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
-<p>Original model implemented by <a class="reference external" href="https://www.kevinzollman.com/">Kevin J. S. Zollman</a> in <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf">Zollman, Kevin J. S. “Modeling the Social Consequences of
-Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.
-1007/s11098-014-0416-7.</a>.
-Original source code in netlogo can be found <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo">here</a>
+<p>This repo contains a python implementation of <a class="reference external" href="https://www.kevinzollman.com/">Kevin J. S. Zollman’s</a>
+“Science Cliques” agent based model. The model was reimplemented to enable
+sensitivity analysis via rapid iteration through parameter values.</p>
+<p>The original model was published in
+<a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf">Zollman, Kevin J.
+S. “Modeling the Social Consequences of
+Testimonial Norms.”</a>
+(Zollman, Kevin J. S. “Modeling the Social Consequences of Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.1007/s11098-014-0416-7.)</p>
+<p>Original source code in netlogo can be found <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo">here</a>
 with original data output files <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti">here</a> and <a class="reference external" href="https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti">here</a>
 (original data files in <a class="reference external" href="http://www.qtiplot.com/">QtiPlotformat</a>)</p>
-<p>Overview of tools implemented in directory (thanks to <a class="reference external" href="https://github.com/jessicasyu">Jessica Yu</a> for guidance on these):</p>
+<section id="model-overview">
+<h2>Model overview<a class="headerlink" href="#model-overview" title="Permalink to this heading"></a></h2>
+<p>number_of_individuals individuals exist in the model. Each individual
+has a reliability(which is pulled from a beta distrubution and averages .6
+over the entire population). num_facts number of facts exist in the
+model. Individuals have a correct belief, an incorrect belief, or no
+belief about each fact. Individuals begin with a starting_knowledge number
+of beliefs. The accuracy of these initial beliefs is proportional to the
+individual’s reliability (an individual with a reliability of .6 will have
+roughly 60% true beliefs and 40% false beliefs).</p>
+<p>The model is advanced 500 time steps per run. At each time step, each
+individual progresses through three phases.</p>
+<ol class="arabic simple">
+<li><p><strong>Investigate</strong>: With probability investigation_probability, independently
+generate a new belief about a fact the individual previously had no
+opinion about. The probability of this new belief being true is the
+individual’s reliability.</p></li>
+<li><p><strong>Select Teachers</strong>: Select a set of number_of_neighbors unique individuals
+from whom to solicit testimony. Each teacher presents a random fact and
+opinion about that fact. Teachers only present facts about which they
+have an opinion.</p></li>
+<li><p><strong>Learn</strong>: Adopt the opinions of teachers if they offer an opinion about
+a fact this individual does not currently have an opinion about,
+otherwise ignore new teacher and keep previous opinion.</p></li>
+</ol>
+<p>All individuals in a model follow one of four philosophies; skeptical, reid,
+direct, and indirect. The individuals’ philosophy determines each
+individual’s behavior in each phase. Skeptical individuals do not
+select teachers nor learn from teachers. They only learn new facts through
+investigation. Reid individuals select teachers randomly. Direct individuals
+select the individuals who have the highest percentage of true beliefs as
+their teachers, calculated using the equation below.</p>
+<p>![Small x=frac{mathrm{truebeliefs}}{(textrm{truebeliefs}&amp;space;&amp;plus;
+&amp;space;textrm{falsebeliefs})}](<a class="reference external" href="https://latex.codecogs.com/svg.image">https://latex.codecogs.com/svg.image</a>?frac{mathrm{truebeliefs}}{(textrm{truebeliefs}&amp;space;&amp;plus;&amp;space;textrm{falsebeliefs})})</p>
+<p>Indirect individuals select individuals who have the most beliefs
+in common with themselves as their teachers. All ties when direct or indirect individuals are selecting teachers are
+broken randomly.</p>
+</section>
+<section id="sensitivity-analysis">
+<h2>Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this heading"></a></h2>
+<p>The sensitivity analysis implemented here is a simple one-at-a-time method. The model was run 10 times with each permutation of parameters.
+The parameters selected for sensitivity analysis are as follows:</p>
+<ul class="simple">
+<li><p>number_of_individuals: the total number of individuals in the model.</p>
+<ul>
+<li><p>Values tested: [8, 20, 40, 60, 80, 100]</p></li>
+</ul>
+</li>
+<li><p>number_of_facts: the total number of facts in the model.</p>
+<ul>
+<li><p>Values tested: [16, 300, 600, 900, 1200, 1500]</p></li>
+</ul>
+</li>
+<li><p>investigation_probability: the probability an individual investigates and
+generates a new belief about an unknown fact each run</p>
+<ul>
+<li><p>Values tested: [0, .2, .4, .6, .8, 1]</p></li>
+</ul>
+</li>
+<li><p>philosophy: the philosophy guiding individual behavior</p>
+<ul>
+<li><p>Values tested:
+[‘skeptical’, ‘reid’, ‘direct’, ‘indirect’]</p></li>
+</ul>
+</li>
+</ul>
+<p>number_of_neighbors was set to 8 for all runs.</p>
+<p>The output measured for each run were as follows:</p>
+<ul class="simple">
+<li><p>truth_mean: the percent of facts agents’ have opinions about that are true
+(calculated using equation above for all agents’ beliefs in the model)</p></li>
+<li><p>truth_total: the total number of true opinions held by all agents in the model</p></li>
+<li><p>false_mean: the percent of facts agents’ have opinions about that are false</p></li>
+<li><p>false_total: the total number of false opinions held by all agents in the
+model</p></li>
+</ul>
+<p>Correlation coefficients were calculated between parameters and outputs.</p>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading"></a></h2>
+<p>Brief overview of python tools implemented in directory (thanks to <a class="reference external" href="https://github.com/jessicasyu">Jessica
+Yu’s</a> python template):</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://python-poetry.org/">Poetry</a> for packaging and dependency management</p></li>
 <li><p><a class="reference external" href="https://tox.readthedocs.io/en/latest/">Tox</a> for automated testing</p></li>
@@ -91,113 +177,6 @@ with original data output files <a class="reference external" href="https://www.
 <li><p><a class="reference external" href="http://mypy-lang.org/">Mypy</a> for type checking</p></li>
 <li><p><a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> for automated documentation</p></li>
 </ul>
-<section id="notes-on-model">
-<h2>Notes on model<a class="headerlink" href="#notes-on-model" title="Permalink to this heading"></a></h2>
-<p>Potential ranges of parameters</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1"># Possible ranges of parameters</span>
-<span class="n">possible_number_of_individuals</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="n">possible_number_of_facts</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1501</span><span class="p">)</span>
-<span class="n">possible_investigation_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">only_new_facts</span> <span class="o">=</span> <span class="nb">bool</span>
-<span class="n">possible_starting_knowledge</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1501</span><span class="p">)</span>
-<span class="n">believe_most_recent</span> <span class="o">=</span> <span class="nb">bool</span>
-<span class="n">possible_reliability_alpha</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="n">possible_reliability_beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.991</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">possible_rewire_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">direct_calibration</span> <span class="o">=</span> <span class="nb">bool</span>
-<span class="n">possible_proportion_alternative_rewire</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">possible_alternative_rewire_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">use_random_seed</span> <span class="o">=</span> <span class="nb">bool</span>
-<span class="n">parameter_randomize</span> <span class="o">=</span> <span class="nb">bool</span>
-</pre></div>
-</div>
-</section>
-<section id="notes-on-zollman-s-described-abm">
-<h2>Notes on Zollman’s described ABM<a class="headerlink" href="#notes-on-zollman-s-described-abm" title="Permalink to this heading"></a></h2>
-<section id="setup">
-<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>100 individuals</p></li>
-<li><p>can solicit 2, 4, 6, or 8 people for testimony (information)</p></li>
-<li><p>“very large number of logically independent propositions” they’d like to learn</p>
-<ul>
-<li><p>1500 for all runs</p></li>
-</ul>
-</li>
-<li><p>start life with info about small number of propositions they believe or
-disbelieve, abstain from all others</p>
-<ul>
-<li><p>15 for all runs</p></li>
-<li><p>correct initial beliefs is correlated to individual’s reliability (see
-below)</p></li>
-</ul>
-</li>
-<li><p>for each proposition, individual can believe, disbelieve, or abstain
-(“withold judgement”)</p></li>
-<li><p>each individual has intrinsic reliability that determines likelihood in
-believing true propositions and disbelieving false propositions</p></li>
-</ul>
-</section>
-<section id="overview-of-parameters">
-<h3>Overview of parameters<a class="headerlink" href="#overview-of-parameters" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>individual reliability (random but averages to 60% over all individuals)</p>
-<ul>
-<li><p>average reliability of all individuals was never varied</p></li>
-</ul>
-</li>
-<li><p>direct calibration: true and false (from looking at parameters)</p>
-<ul>
-<li><p>true for directhume, false for indirecthume, false for reid</p></li>
-</ul>
-</li>
-<li><dl class="simple">
-<dt>neighbor percent = percent of number of neighbors (2 neighbors, 2 percent,</dt><dd><p>8 neighbors, 8 percent)</p>
-</dd>
-</dl>
-</li>
-<li><p>reid wire probability = 0, Hume wire probability = 1</p></li>
-<li><p>investigation probability = .1</p></li>
-<li><p>only_newfacts = false</p></li>
-<li><p>believe_most_recent = false</p></li>
-<li><p>reliability determined by drawing from beta distribution</p>
-<ul>
-<li><p>reliability beta = 1</p></li>
-<li><p>reliability alpha = 1.5</p></li>
-</ul>
-</li>
-<li><p>parameter randomize = fals</p></li>
-<li><p>step[Y] = 500</p></li>
-<li><p>outputs:</p>
-<ul>
-<li><p>meantruth - mean of individuals[Y]</p></li>
-<li><p>variancetruth - mean of individuals[Y]</p></li>
-<li><p>meantruth - total of individuals[Y]</p></li>
-<li><p>variancetruth - total of individuals[Y]</p></li>
-<li><p>paper also talks about sizes of communities so probably some statistics
-about community size</p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="at-each-time-step-each-individual">
-<h3>At each time step each individual<a class="headerlink" href="#at-each-time-step-each-individual" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>observes something true about the world with 10% chance</p></li>
-<li><p>chooses a group of people with which to solicit testimony</p></li>
-<li><p>asks each member of the group to tell them something that member either
-believes or disbelieves</p></li>
-<li><p>receives honest replies from the asked individuals</p></li>
-<li><p>if told somethign about which they currently have no opinion, they believe
-what they are told. Otherwise they donnot change their belief</p>
-<ul>
-<li><p>“This means that in this model there is no ‘‘belief revision.’’ This is certainly an idealization, which has been made for two reasons. First, following the literature on testimony this model focuses primarily on the acquisition of new beliefs not on belief revision. The later issue, called peer disagreement, has an extensive literature which will not be addressed here. Second, there is no uncontroversial way to model belief revision especially in the context of qualitative beliefs. Important future work should tackle this question directly to determine how robust the findings are to modifications of this assumption.”</p></li>
-</ul>
-</li>
-</ul>
-<p>Process is repeated 500 times</p>
-</section>
 </section>
 </section>
 <section id="indices-and-tables">
