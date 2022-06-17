@@ -7,18 +7,29 @@
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 This repo contains a python implementation of [Kevin J. S. Zollman's](https://www.kevinzollman.com/)
-"Science Cliques" agent based model. The model was reimplemented to enable 
-sensitivity analysis via rapid iteration through parameter values.
-
+"Science Cliques" agent based model.
 The original model was published in 
 [Zollman, Kevin J.
 S. “Modeling the Social Consequences of 
 Testimonial Norms.”](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/zollman_-_modeling_the_social_consequence_of_testimonial_norms.pdf)
 (Zollman, Kevin J. S. “Modeling the Social Consequences of Testimonial Norms.” Philosophical Studies 172, no. 9 (2015): 2371–83. doi:10.1007/s11098-014-0416-7.)
-
 Original source code in netlogo can be found [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/sciencecliquesv2.nlogo)
 with original data output files [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
 (original data files in [QtiPlotformat](http://www.qtiplot.com/))
+
+## Motivation
+Philosophers of science use Agent Based Models (ABMs) to study how 
+collaboration and communication network structures emerge from decisions and 
+actions made by individual scientists. While models in this field have allowed 
+researchers to generate new hypotheses relating individuals' behaviors to 
+emergent network structures, researchers rarely discuss the robustness of 
+their results to changes in (parametric and non parametric) model elements, 
+nor do researchers frequently characterize which elements have the greatest 
+impact on emergent behavior.
+
+Here I present an example of how a simple sensitivity analysis can be 
+conducted on a philosophy ABM and what additional information can be gleaned 
+from sensitivity analysis.
 
 ## Model overview
 number_of_individuals individuals exist in the model. Each individual 
@@ -56,8 +67,8 @@ their teachers, calculated using the equation below.
 &space;\textrm{falsebeliefs})}](https://latex.codecogs.com/svg.image?\frac{\mathrm{truebeliefs}}{(\textrm{truebeliefs}&space;&plus;&space;\textrm{falsebeliefs})}) 
 
 Indirect individuals select individuals who have the most beliefs 
-in common with themselves as their teachers. All ties when direct or indirect individuals are selecting teachers are 
-broken randomly.
+in common with themselves as their teachers. All ties when direct or indirect
+individuals are selecting teachers are broken randomly.
 
 ## Sensitivity Analysis
 The sensitivity analysis implemented here is a simple one-at-a-time method. The model was run 10 times with each permutation of parameters.
