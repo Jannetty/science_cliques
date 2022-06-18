@@ -107,4 +107,6 @@ Yu's](https://github.com/jessicasyu) python template):
 - [Mypy](http://mypy-lang.org/) for type checking
 - [Sphinx](https://www.sphinx-doc.org/) for automated documentation
 
+This model is built using the python package [mesa](https://github.com/projectmesa/mesa).
+
 
