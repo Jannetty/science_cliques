@@ -63,3 +63,14 @@ class TestIndividual(unittest.TestCase):
             0
         ].get_random_index_of_not_abstained_belief()
         assert model.schedule._agents[0].all_facts[agent0_not_abstained_belief] != 0
+
+    def test_offer_testimony(self):
+        model = CliqueModel(skeptical=True)
+        agent0 = model.schedule._agents[0]
+        return_tuple = agent0.offer_testimony()
+        assert return_tuple[1] != 0
+
+    def test_step(self):
+        model = CliqueModel(skeptical=True)
+        agent0 = model.schedule._agents[0]
+        agent0.step()
