@@ -29,7 +29,7 @@ def run_short() -> None:
         print(f"False mean: {false_mean}")
         print(f"False total: {false_total}")
 
-        #export_data(model)
+        # export_data(model)
 
 
 # Press the green button in the gutter to run the script.
