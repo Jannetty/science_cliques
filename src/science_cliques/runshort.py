@@ -5,9 +5,14 @@ from science_cliques.model import CliqueModel
 def run_short() -> None:
     """Mini runner to test single cases"""
     for replicate in range(1):
-        model = CliqueModel(number_of_individuals=20, number_of_neighbors=8,
-                            num_facts=1200, starting_knowledge=15,
-                            investigation_probability=.8, skeptical=True)
+        model = CliqueModel(
+            number_of_individuals=20,
+            number_of_neighbors=8,
+            num_facts=1200,
+            starting_knowledge=15,
+            investigation_probability=0.8,
+            skeptical=True,
+        )
 
         for step in range(500):
             model.step()
@@ -24,7 +29,7 @@ def run_short() -> None:
         print(f"False mean: {false_mean}")
         print(f"False total: {false_total}")
 
-        export_data(model)
+        #export_data(model)
 
 
 # Press the green button in the gutter to run the script.
