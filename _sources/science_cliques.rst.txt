@@ -16,4 +16,5 @@ Submodules
    science_cliques.individual
    science_cliques.model
    science_cliques.run
+   science_cliques.run_og
    science_cliques.runshort
