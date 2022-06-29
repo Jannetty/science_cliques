@@ -2,7 +2,7 @@ import csv
 from science_cliques.model import CliqueModel
 
 
-def export_data(model: CliqueModel) -> None:
+def export_data(model: CliqueModel, file_name: str) -> None:
     """Saves all parameteres and outputs of model run"""
     # get parameters
     num_individuals = str(model.num_agents)
@@ -47,7 +47,8 @@ def export_data(model: CliqueModel) -> None:
     # First, open the old CSV file in append mode, hence mentioned as 'a'
     # Then, for the CSV file, create a file object
 
-    with open("data/output.csv", "a", newline="\n") as f_object:
+    file_path = "data/" + file_name
+    with open(file_path, "a", newline="\n") as f_object:
         # Pass the CSV  file object to the writer() function
         writer_object = csv.writer(f_object)
         # Result - a writer object

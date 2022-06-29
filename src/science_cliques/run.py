@@ -78,7 +78,7 @@ def run() -> None:
                                 f"Run number: {run_number}, {total_runs - run_number} "
                                 f"runs remaining."
                             )
-                            export_data(model)
+                            export_data(model, "output.txt")
 
 
 # Press the green button in the gutter to run the script.
