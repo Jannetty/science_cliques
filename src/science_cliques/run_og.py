@@ -4,7 +4,7 @@ from science_cliques.model import CliqueModel
 
 def run_og() -> None:
     """Mini runner to test cases from original paper"""
-    run = 1;
+    run = 1
     num_neighbor_options = [2, 4, 6, 8]
     for num_neighbors in num_neighbor_options:
         num_neighbors
@@ -50,6 +50,7 @@ def run_og() -> None:
                 print(f"Run {run}, {160 - run} runs remaining")
                 run = run + 1
                 export_data(model, "output_og.csv")
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
