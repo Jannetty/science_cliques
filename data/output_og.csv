@@ -1,4 +1,4 @@
-num_individuals,num_neighbors,num_facts,starting_knowledge,philosophy,truth_mean,truth_total,false_mean,false_total
+num_individuals,num_neighbors,num_facts,starting_knowledge,investigation_probability,philosophy,truth_mean,truth_total,false_mean,false_total
 100,2,1200,15,0.1,skeptical,0.5881428571428571,876,0.41185714285714276,615
 100,2,1200,15,0.1,skeptical,0.630952380952381,944,0.36904761904761907,552
 100,2,1200,15,0.1,skeptical,0.6084285714285713,908,0.39157142857142857,585
