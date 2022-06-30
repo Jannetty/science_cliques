@@ -1,5 +1,4 @@
 import unittest
-
 from science_cliques.runshort import run_short
 
 
