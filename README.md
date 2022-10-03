@@ -17,6 +17,8 @@ Original source code in netlogo can be found [here](https://www.kevinzollman.com
 with original data output files [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/testimonydata.qti) and [here](https://www.kevinzollman.com/uploads/5/0/3/6/50361245/polymorphictestimony.qti) 
 (original data files in [QtiPlotformat](http://www.qtiplot.com/))
 
+Final write up for this project can be read in [Science_Cliques_writeup.pdf](Science_Cliques_writeup.pdf).
+
 ## Motivation
 Philosophers of science use Agent Based Models (ABMs) to study how 
 collaboration and communication network structures emerge from decisions and 
