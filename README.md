@@ -19,6 +19,8 @@ with original data output files [here](https://www.kevinzollman.com/uploads/5/0/
 
 Final write up for this project can be read in [Science_Cliques_writeup.pdf](Science_Cliques_writeup.pdf).
 
+Note that the displayed code coverage is inflated. This was a course project that I used as an opportunity to experiment with [Codecov](https://about.codecov.io/). Most tests I wrote do not actually test anything, thus the effective coverage is lower than the coverate displayed.
+
 ## Motivation
 Philosophers of science use Agent Based Models (ABMs) to study how 
 collaboration and communication network structures emerge from decisions and 
